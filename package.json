@@ -1,0 +1,43 @@
+{
+  "name": "@gwatch/watchtower",
+  "version": "1.0.0",
+  "description": "Watchtower: Persistent development environments wrapper for Docker and Tmux",
+  "main": "dist/index.js",
+  "bin": {
+    "watchtower": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node src/index.ts",
+    "watch": "tsc -w",
+    "prepublishOnly": "npm run build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/G-Watch/Watchtower.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/G-Watch/Watchtower/issues"
+  },
+  "homepage": "https://github.com/G-Watch/Watchtower#readme",
+  "dependencies": {
+    "commander": "^14.0.3",
+    "dockerode": "^4.0.9",
+    "execa": "^9.6.1",
+    "fs-extra": "^11.3.3",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/dockerode": "^4.0.1",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^25.2.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
