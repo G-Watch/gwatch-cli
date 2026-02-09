@@ -1,10 +1,10 @@
-# Watchtower
+# G-Watch CLI
 
 <div align="center">
     <img src="./docs/logo.jpg" width="500px" />
 </div>
 
-Watchtower is a CLI tool that manage agentic persistent development environments.
+G-Watch CLI is a tool for running agentic GPU system profiling and optimization using [G-Watch](https://github.com/G-Watch/G-Watch).
 
 ## Features
 
@@ -18,7 +18,7 @@ Watchtower is a CLI tool that manage agentic persistent development environments
 Install globally via npm:
 
 ```bash
-npm install -g @gwatch/watchtower
+npm install -g @gwatch/gwatch-cli
 ```
 
 Alternatively, to install from source:
@@ -33,35 +33,35 @@ npm install -g .
 
 ### 1. Create a container from a remote git repo
 ```bash
-watchtower create --repo https://github.com/user/project.git --dockerfile ./Dockerfile
+gwatch-cli create --repo https://github.com/user/project.git --dockerfile ./Dockerfile
 ```
 
 ### 2. Create a container from current local directory
 ```bash
-watchtower create --dir . --dockerfile ./Dockerfile
+gwatch-cli create --dir . --dockerfile ./Dockerfile
 ```
 
 ### 3. Enter a container/session
 ```bash
 # Enter container 0, default session
-watchtower enter 0
+gwatch-cli enter 0
 
 # Enter container 0, specific session (creates if not exists)
-watchtower enter 0/debug_sass
+gwatch-cli enter 0/debug_sass
 ```
 
 ### 4. List status
 ```bash
-watchtower ls
+gwatch-cli ls
 ```
 
 ### 5. Stop commands
 ```bash
 # Stops the Docker Container
-watchtower stop 0
+gwatch-cli stop 0
 
 # Kills only the specific tmux session inside the container
-watchtower stop 0/debug_sass
+gwatch-cli stop 0/debug_sass
 ```
 
 ## Internal Database

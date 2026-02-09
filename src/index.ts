@@ -4,23 +4,23 @@ import { createAction } from './commands/create';
 import { enterAction } from './commands/enter';
 import { lsAction } from './commands/ls';
 import { stopAction } from './commands/stop';
+const { version } = require('../package.json');
 
 const program = new Command();
 
 const LOGO = `
-
-▄▄▄▄  ▄▄▄  ▄▄▄▄                  ▄▄   ▄▄▄▄▄▄▄▄▄                        
-▀███  ███  ███▀       ██         ██   ▀▀▀███▀▀▀                        
- ███  ███  ███  ▀▀█▄ ▀██▀▀ ▄████ ████▄   ███ ▄███▄ ██   ██ ▄█▀█▄ ████▄ 
- ███▄▄███▄▄███ ▄█▀██  ██   ██    ██ ██   ███ ██ ██ ██ █ ██ ██▄█▀ ██ ▀▀ 
-  ▀████▀████▀  ▀█▄██  ██   ▀████ ██ ██   ███ ▀███▀  ██▀██  ▀█▄▄▄ ██    
-
+ ██████╗       ██╗    ██╗ █████╗ ████████╗ ██████╗██╗  ██╗
+██╔════╝       ██║    ██║██╔══██╗╚══██╔══╝██╔════╝██║  ██║
+██║  ███╗█████╗██║ █╗ ██║███████║   ██║   ██║     ███████║
+██║   ██║╚════╝██║███╗██║██╔══██║   ██║   ██║     ██╔══██║
+╚██████╔╝      ╚███╔███╔╝██║  ██║   ██║   ╚██████╗██║  ██║
+ ╚═════╝        ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝    ╚═════╝╚═╝  ╚═╝
 `;
 
 program
-  .name('watchtower')
+  .name('gwatch-cli')
   .description('Persistent development environments wrapper for Docker and Tmux')
-  .version('1.0.0')
+  .version(version)
   .addHelpText('before', LOGO);
 
 program

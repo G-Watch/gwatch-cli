@@ -6,6 +6,7 @@ const create_1 = require("./commands/create");
 const enter_1 = require("./commands/enter");
 const ls_1 = require("./commands/ls");
 const stop_1 = require("./commands/stop");
+const { version } = require('../package.json');
 const program = new commander_1.Command();
 const LOGO = `
 
@@ -17,9 +18,9 @@ const LOGO = `
 
 `;
 program
-    .name('watchtower')
+    .name('gwatch-cli')
     .description('Persistent development environments wrapper for Docker and Tmux')
-    .version('1.0.0')
+    .version(version)
     .addHelpText('before', LOGO);
 program
     .command('create')

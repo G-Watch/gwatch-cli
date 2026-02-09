@@ -3,9 +3,10 @@ import os from 'os';
 import fs from 'fs-extra';
 import { buildImage, cloneRepo, createContainer, ensureEnvironment, setupDefaultTmux } from '../docker';
 import { addContainer, readDb } from '../db';
+import { logSuccess } from '../utils/ui';
 
 export async function createAction(options: any) {
-  const { repo, dir, dockerfile, name: nameOverride } = options;
+  const { repo, dir, dockerfile, name: suffix } = options;
 
   if (!repo && !dir) {
     console.error('Error: You must provide either --repo or --dir');
@@ -13,29 +14,36 @@ export async function createAction(options: any) {
   }
 
   let workspacePath: string;
-  let repoName: string;
+  let baseName: string;
 
   if (repo) {
-    repoName = nameOverride || repo.split('/').pop()?.replace('.git', '') || 'unknown';
-    workspacePath = path.join(os.tmpdir(), 'watchtower', repoName);
+    baseName = repo.split('/').pop()?.replace('.git', '') || 'unknown';
+    workspacePath = path.join(os.tmpdir(), 'watchtower', baseName);
     await fs.ensureDir(workspacePath);
     await cloneRepo(repo, workspacePath);
   } else {
     workspacePath = path.resolve(dir);
-    repoName = nameOverride || path.basename(workspacePath);
+    baseName = path.basename(workspacePath);
   }
 
   const userName = os.userInfo().username;
   const db = await readDb();
   
   let index = 1;
-  let containerName = `${repoName}-${userName}-${index}`;
+  const generateContainerName = (idx: number) => {
+    const parts = [baseName, userName];
+    if (suffix) parts.push(suffix);
+    parts.push(idx.toString());
+    return parts.join('-');
+  };
+
+  let containerName = generateContainerName(index);
   while (db.containers.some(c => c.name === containerName)) {
     index++;
-    containerName = `${repoName}-${userName}-${index}`;
+    containerName = generateContainerName(index);
   }
 
-  const imageName = await buildImage(dockerfile, repoName, workspacePath);
+  const imageName = await buildImage(dockerfile, baseName, workspacePath);
   const container = await createContainer(imageName, containerName, workspacePath);
   
   console.log('Setting up environment (Node.js, Tmux, Gemini CLI)...');
@@ -53,5 +61,5 @@ export async function createAction(options: any) {
     sessions: [{ name: 'default', lastAccess: new Date().toISOString() }],
   });
 
-  console.log(`Container ${containerName} created successfully! (Index: ${db.containers.length})`);
+  logSuccess(`Container ${containerName} created successfully! (Index: ${db.containers.length})`);
 }
