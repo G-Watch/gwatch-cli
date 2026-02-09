@@ -46,10 +46,10 @@ async function createContainer(imageName, containerName, workspacePath) {
 async function ensureEnvironment(containerId) {
     const container = docker.getContainer(containerId);
     const setupCommands = [
-        // Install Node.js if not present (simplified for Ubuntu/Debian based)
-        'which node || (apt-get update && apt-get install -y curl && curl -fsSL https://deb.nodesource.com/setup_current.x | bash - && apt-get install -y nodejs)',
+        // Install Node.js if not present (for Ubuntu/Debian based)
+        'which node || (apt-get update -o APT::Sandbox::User=root && apt-get install -y curl -o APT::Sandbox::User=root && curl -fsSL https://deb.nodesource.com/setup_current.x | bash - && apt-get install -y nodejs)',
         // Install Tmux
-        'which tmux || (apt-get update && apt-get install -y tmux)',
+        'which tmux || (apt-get update -o APT::Sandbox::User=root && apt-get install -y tmux -o APT::Sandbox::User=root)',
         // Install gemini-cli
         'which gemini || npm install -g @google/gemini-cli',
     ];
