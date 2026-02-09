@@ -7,10 +7,21 @@ import { stopAction } from './commands/stop';
 
 const program = new Command();
 
+const LOGO = `
+
+▄▄▄▄  ▄▄▄  ▄▄▄▄                  ▄▄   ▄▄▄▄▄▄▄▄▄                        
+▀███  ███  ███▀       ██         ██   ▀▀▀███▀▀▀                        
+ ███  ███  ███  ▀▀█▄ ▀██▀▀ ▄████ ████▄   ███ ▄███▄ ██   ██ ▄█▀█▄ ████▄ 
+ ███▄▄███▄▄███ ▄█▀██  ██   ██    ██ ██   ███ ██ ██ ██ █ ██ ██▄█▀ ██ ▀▀ 
+  ▀████▀████▀  ▀█▄██  ██   ▀████ ██ ██   ███ ▀███▀  ██▀██  ▀█▄▄▄ ██    
+
+`;
+
 program
   .name('watchtower')
   .description('Persistent development environments wrapper for Docker and Tmux')
-  .version('1.0.0');
+  .version('1.0.0')
+  .addHelpText('before', LOGO);
 
 program
   .command('create')
@@ -35,5 +46,15 @@ program
   .command('stop <target>')
   .description('Stop a container or a specific tmux session')
   .action(stopAction);
+
+// Logic to show logo and help if no command is provided
+if (process.argv.length === 2) {
+  program.help();
+}
+
+// Logic to show logo on version
+if (process.argv.includes('-V') || process.argv.includes('--version')) {
+  console.log(LOGO);
+}
 
 program.parse(process.argv);

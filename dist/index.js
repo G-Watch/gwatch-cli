@@ -7,10 +7,20 @@ const enter_1 = require("./commands/enter");
 const ls_1 = require("./commands/ls");
 const stop_1 = require("./commands/stop");
 const program = new commander_1.Command();
+const LOGO = `
+
+▄▄▄▄  ▄▄▄  ▄▄▄▄                  ▄▄   ▄▄▄▄▄▄▄▄▄                        
+▀███  ███  ███▀       ██         ██   ▀▀▀███▀▀▀                        
+ ███  ███  ███  ▀▀█▄ ▀██▀▀ ▄████ ████▄   ███ ▄███▄ ██   ██ ▄█▀█▄ ████▄ 
+ ███▄▄███▄▄███ ▄█▀██  ██   ██    ██ ██   ███ ██ ██ ██ █ ██ ██▄█▀ ██ ▀▀ 
+  ▀████▀████▀  ▀█▄██  ██   ▀████ ██ ██   ███ ▀███▀  ██▀██  ▀█▄▄▄ ██    
+
+`;
 program
     .name('watchtower')
     .description('Persistent development environments wrapper for Docker and Tmux')
-    .version('1.0.0');
+    .version('1.0.0')
+    .addHelpText('before', LOGO);
 program
     .command('create')
     .description('Create a container from a remote git repo or local directory')
@@ -31,4 +41,12 @@ program
     .command('stop <target>')
     .description('Stop a container or a specific tmux session')
     .action(stop_1.stopAction);
+// Logic to show logo and help if no command is provided
+if (process.argv.length === 2) {
+    program.help();
+}
+// Logic to show logo on version
+if (process.argv.includes('-V') || process.argv.includes('--version')) {
+    console.log(LOGO);
+}
 program.parse(process.argv);

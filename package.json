@@ -1,7 +1,7 @@
 {
   "name": "@gwatch/watchtower",
-  "version": "1.0.0",
-  "description": "Watchtower: Persistent development environments wrapper for Docker and Tmux",
+  "version": "1.0.2",
+  "description": "Watchtower: environment manager for agentic development",
   "main": "dist/index.js",
   "bin": {
     "watchtower": "dist/index.js"
