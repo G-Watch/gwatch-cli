@@ -16,15 +16,16 @@ const docker = new dockerode_1.default();
 async function getRunningContainers() {
     return await docker.listContainers();
 }
-async function buildImage(dockerfilePath, repoName) {
+async function buildImage(dockerfilePath, repoName, contextDir) {
     const imageName = `watchtower-${repoName.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
     console.log(`Building image ${imageName}...`);
-    // We'll use execa for build to see output more easily or just dockerode
-    // For simplicity and better output handling in CLI, execa is often easier for build
-    const dockerfileDir = path_1.default.dirname(path_1.default.resolve(dockerfilePath));
-    await (0, execa_1.execa)('docker', ['build', '-t', imageName, '-f', dockerfilePath, '.'], {
-        cwd: dockerfileDir,
+    await (0, execa_1.execa)('docker', ['build', '-t', imageName, '-f', path_1.default.resolve(dockerfilePath), '.'], {
+        cwd: contextDir,
         stdio: 'inherit',
+        env: {
+            ...process.env,
+            DOCKER_BUILDKIT: '0'
+        }
     });
     return imageName;
 }
@@ -46,10 +47,10 @@ async function createContainer(imageName, containerName, workspacePath) {
 async function ensureEnvironment(containerId) {
     const container = docker.getContainer(containerId);
     const setupCommands = [
-        // Install Node.js if not present (for Ubuntu/Debian based)
-        'which node || (apt-get update -o APT::Sandbox::User=root && apt-get install -y curl -o APT::Sandbox::User=root && curl -fsSL https://deb.nodesource.com/setup_current.x | bash - && apt-get install -y nodejs)',
+        // Install Node.js if not present (simplified for Ubuntu/Debian based)
+        'which node || (apt-get update && apt-get install -y curl && curl -fsSL https://deb.nodesource.com/setup_current.x | bash - && apt-get install -y nodejs)',
         // Install Tmux
-        'which tmux || (apt-get update -o APT::Sandbox::User=root && apt-get install -y tmux -o APT::Sandbox::User=root)',
+        'which tmux || (apt-get update && apt-get install -y tmux)',
         // Install gemini-cli
         'which gemini || npm install -g @google/gemini-cli',
     ];

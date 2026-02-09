@@ -1,6 +1,6 @@
 {
   "name": "@gwatch/watchtower",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Watchtower: environment manager for agentic development",
   "main": "dist/index.js",
   "bin": {

@@ -10,16 +10,17 @@ export async function getRunningContainers() {
   return await docker.listContainers();
 }
 
-export async function buildImage(dockerfilePath: string, repoName: string) {
+export async function buildImage(dockerfilePath: string, repoName: string, contextDir: string) {
   const imageName = `watchtower-${repoName.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
   console.log(`Building image ${imageName}...`);
   
-  // We'll use execa for build to see output more easily or just dockerode
-  // For simplicity and better output handling in CLI, execa is often easier for build
-  const dockerfileDir = path.dirname(path.resolve(dockerfilePath));
-  await execa('docker', ['build', '-t', imageName, '-f', dockerfilePath, '.'], {
-    cwd: dockerfileDir,
+  await execa('docker', ['build', '-t', imageName, '-f', path.resolve(dockerfilePath), '.'], {
+    cwd: contextDir,
     stdio: 'inherit',
+    env: {
+      ...process.env,
+      DOCKER_BUILDKIT: '0'
+    }
   });
   
   return imageName;

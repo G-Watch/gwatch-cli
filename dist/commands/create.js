@@ -35,7 +35,7 @@ async function createAction(options) {
         index++;
         containerName = `${repoName}-${userName}-${index}`;
     }
-    const imageName = await (0, docker_1.buildImage)(dockerfile, repoName);
+    const imageName = await (0, docker_1.buildImage)(dockerfile, repoName, workspacePath);
     const container = await (0, docker_1.createContainer)(imageName, containerName, workspacePath);
     console.log('Setting up environment (Node.js, Tmux, Gemini CLI)...');
     await (0, docker_1.ensureEnvironment)(container.id);
